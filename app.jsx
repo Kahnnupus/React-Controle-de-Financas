@@ -43,14 +43,14 @@ function App() {
         data: {
           labels: ["Receitas", "Despesas"],
           datasets: [{
-            data: [totalReceitas, Math.abs(totalDespesas)],
+            data: transacoes.length === 0 ? [1, 1] : [totalReceitas || 0, Math.abs(totalDespesas) || 0],
             backgroundColor: ["#4caf50", "#f44336"]
           }]
         },
         options: { responsive: true, plugins: { legend: { position: "bottom" } } }
       });
     } else {
-      graficoFinanceiro.data.datasets[0].data = [totalReceitas, Math.abs(totalDespesas)];
+      graficoFinanceiro.data.datasets[0].data = transacoes.length === 0 ? [1, 1] : [totalReceitas || 0, Math.abs(totalDespesas) || 0];
       graficoFinanceiro.update();
     }
   }, [transacoes]);
@@ -89,7 +89,7 @@ function App() {
         <p>Despesas: <b style={{color:"red"}}>R$ {Math.abs(totalDespesas).toFixed(2)}</b></p>
         <p>Saldo: <b>R$ {saldoAtual.toFixed(2)}</b></p>
         <div className="barra-progresso">
-          <div style={{width: `${totalReceitas ? (Math.abs(totalDespesas)/totalReceitas)*100 : 0}%`}}></div>
+          <div style={{width: `${Math.min(100, totalReceitas ? (Math.abs(totalDespesas)/totalReceitas)*100 : 0)}%`}}></div>
         </div>
       </div>
 

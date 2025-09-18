@@ -2,8 +2,8 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background: #f4f4f9;
-  color: #333;
+  background: #222;
+  color: #eee;
 }
 
 .container {
@@ -13,11 +13,11 @@ body {
 }
 
 .card {
-  background: #fff;
+  background: #333;
   padding: 1rem;
   margin-bottom: 1rem;
   border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
 h1, h2, h3 {
@@ -27,10 +27,14 @@ h1, h2, h3 {
 
 input {
   width: 100%;
+  max-width: 100%;
   padding: 0.6rem;
   margin: 0.3rem 0;
-  border: 1px solid #ccc;
+  border: 1px solid #666;
   border-radius: 8px;
+  background: #444;
+  color: #eee;
+  box-sizing: border-box;
 }
 
 button {
@@ -59,11 +63,11 @@ li {
   display: flex;
   justify-content: space-between;
   padding: 0.5rem 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #555;
 }
 
 .barra-progresso {
-  background: #ddd;
+  background: #555;
   border-radius: 6px;
   height: 10px;
   margin-top: 0.5rem;
