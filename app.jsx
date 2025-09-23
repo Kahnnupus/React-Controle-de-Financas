@@ -89,7 +89,8 @@ function App() {
         <p>Despesas: <b style={{color:"red"}}>R$ {Math.abs(totalDespesas).toFixed(2)}</b></p>
         <p>Saldo: <b>R$ {saldoAtual.toFixed(2)}</b></p>
         <div className="barra-progresso">
-          <div style={{width: `${Math.min(100, totalReceitas ? (Math.abs(totalDespesas)/totalReceitas)*100 : 0)}%`}}></div>
+          <div className="receita-bar" style={{width: `${totalReceitas + Math.abs(totalDespesas) > 0 ? (totalReceitas / (totalReceitas + Math.abs(totalDespesas))) * 100 : 0}%`, borderRadius: totalReceitas > 0 && Math.abs(totalDespesas) === 0 ? '6px' : totalReceitas > 0 && Math.abs(totalDespesas) > 0 ? '6px 0 0 6px' : '0'}}></div>
+          <div className="despesa-bar" style={{width: `${totalReceitas + Math.abs(totalDespesas) > 0 ? (Math.abs(totalDespesas) / (totalReceitas + Math.abs(totalDespesas))) * 100 : 0}%`, borderRadius: Math.abs(totalDespesas) > 0 && totalReceitas === 0 ? '6px' : Math.abs(totalDespesas) > 0 && totalReceitas > 0 ? '0 6px 6px 0' : '0'}}></div>
         </div>
       </div>
 
