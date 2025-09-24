@@ -83,3 +83,7 @@ li {
   background: #f44336;
   height: 100%;
 }
+.grafico-container {
+  opacity: 0.1;
+  margin-top: 1rem;
+}
