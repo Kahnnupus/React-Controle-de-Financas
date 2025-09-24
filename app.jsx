@@ -18,8 +18,8 @@ function App() {
 
   // Controle de tipos de gráficos ( essa parada são as variaveis que controlam os graficos e pá)
   const [tipoGraficoFinanceiro, setTipoGraficoFinanceiro] = useState("doughnut");
-  const [tipoGraficoCategorias, setTipoGraficoCategorias] = useState("bar");
-  const [abaAtiva, setAbaAtiva] = useState("despesas");
+  const [tipoGraficoCategorias, setTipoGraficoCategorias] = useState("pie");
+  const [abaAtiva, setAbaAtiva] = useState("receita");
 
   const categoriasDisponiveis = [
     "Alimentação", "Transporte", "Lazer", "Saúde", "Educação", "Moradia", "Outros"
@@ -103,7 +103,7 @@ function App() {
           datasets: [{
             label: abaAtiva === "receita" ? "Receitas por Categoria" : "Despesas por Categoria",
             data: Object.values(dadosCategorias),
-            backgroundColor: ["#ff6384","#ff9f40","#ffcd56","#4bc0c0","#36a2eb","#9966ff","#c9cbcf"]
+            backgroundColor: ["#ff6384","#ff9f40","#ffcd56","#4bc0c0","#36a2eb","#b566ffff","#c9cbcf"]
           }]
         },
         options: { responsive: true, plugins: { legend: { position: "bottom" } } }
@@ -196,14 +196,14 @@ function App() {
         <div className="card">
           <h3>Gráficos por Categoria</h3>
           <div style={{display:"flex", gap:"0.5rem", marginBottom:"0.5rem"}}>
-            <button onClick={()=>setAbaAtiva("despesas")} style={{flex:1, background: abaAtiva==="despesas"?"#f44336":"#ddd", color: abaAtiva==="despesas"?"#fff":"#000"}}>Despesas</button>
             <button onClick={()=>setAbaAtiva("receita")} style={{flex:1, background: abaAtiva==="receita"?"#4caf50":"#ddd", color: abaAtiva==="receita"?"#fff":"#000"}}>Receitas</button>
+            <button onClick={()=>setAbaAtiva("despesas")} style={{flex:1, background: abaAtiva==="despesas"?"#f44336":"#ddd", color: abaAtiva==="despesas"?"#fff":"#000"}}>Despesas</button>
           </div>
           <label>Tipo de Gráfico: </label>
           <select value={tipoGraficoCategorias} onChange={(e)=>setTipoGraficoCategorias(e.target.value)}>
-            <option value="bar">Barra</option>
-            <option value="doughnut">Pizza (Doughnut)</option>
-          </select>
+            <option value="pie">Pizza</option>
+            <option value="radar">Radar</option>
+          </select> 
           <canvas id="graficoCategorias"></canvas>
         </div>
       </div>
@@ -218,8 +218,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 
 
 
-
-
-// TÔ CANSADO VOU DORMIR e se lembrem de tirar os comentários depois 
-
+// TÔ CANSADO VOU DORMIR e se lembrem de tirar os comentários depois
 // ass: Felipe 
