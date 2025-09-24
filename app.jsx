@@ -1,14 +1,12 @@
 const { useState, useEffect } = React;
 
 // é as variáveis dos gráficos (nem toque nisso aqu)
-
 let graficoFinanceiro = null;
 let graficoCategorias = null;
 
 function App() {
 
-  // Estados principais (essas paradas são as variaveis que guardam os dados e tals)
-
+  // Estados principais
   const [transacoes, setTransacoes] = useState([]);
   const [descricao, setDescricao] = useState("");
   const [valor, setValor] = useState("");
@@ -16,7 +14,7 @@ function App() {
   const [categoria, setCategoria] = useState("Outros");
   const [erro, setErro] = useState("");
 
-  // Controle de tipos de gráficos ( essa parada são as variaveis que controlam os graficos e pá)
+  // Controle de tipos de gráficos
   const [tipoGraficoFinanceiro, setTipoGraficoFinanceiro] = useState("doughnut");
   const [tipoGraficoCategorias, setTipoGraficoCategorias] = useState("pie");
   const [abaAtiva, setAbaAtiva] = useState("receita");
@@ -25,8 +23,7 @@ function App() {
     "Alimentação", "Transporte", "Lazer", "Saúde", "Educação", "Moradia", "Outros"
   ];
 
-  // Adicionar nova transação (auto explicativo)
-
+  // Adicionar nova transação
   const adicionarTransacao = (tipo) => {
     if (!descricao || !valor || !data || !categoria) {
       setErro("Preencha todos os campos.");
@@ -44,20 +41,17 @@ function App() {
     setDescricao(""); setValor(""); setData(""); setCategoria("Outros");
   };
 
-  // Remover transação ( é o X que aparece do lado das transação lá)
-
+  // Remover transação
   const removerTransacao = (id) => {
     setTransacoes(transacoes.filter(t => t.id !== id));
   };
 
-  // Totais principais (auto explicativo)
-
+  // Totais principais
   const totalReceitas = transacoes.filter(t => t.valor > 0).reduce((soma,t)=>soma+t.valor,0);
   const totalDespesas = transacoes.filter(t => t.valor < 0).reduce((soma,t)=>soma+t.valor,0);
   const saldoAtual = totalReceitas + totalDespesas;
 
-  // (Complicado) - isso daqui soma por categoria o valor total das receitas ou despesas relacionados as categorias e tals
-
+  // Soma por categoria
   const somaPorCategoria = (tipo) => {
     const filtro = tipo === "receita" ? (t => t.valor > 0) : (t => t.valor < 0);
     const valores = {};
@@ -74,14 +68,14 @@ function App() {
 
     const dadosCategorias = somaPorCategoria(abaAtiva);
 
-    // Gráfico de receitas e despesas (mais pra baixo tem mais grafico)
+    // Gráfico de receitas e despesas
     if (!graficoFinanceiro) {
       graficoFinanceiro = new Chart(ctx, {
         type: tipoGraficoFinanceiro,
         data: {
           labels: ["Receitas", "Despesas"],
           datasets: [{
-            data: transacoes.length === 0 ? [1,1] : [totalReceitas, Math.abs(totalDespesas)],
+            data: transacoes.length === 0 ? [1, 1] : [totalReceitas || 0, Math.abs(totalDespesas) || 0],
             backgroundColor: ["#4caf50", "#f44336"]
           }]
         },
@@ -89,12 +83,11 @@ function App() {
       });
     } else {
       graficoFinanceiro.config.type = tipoGraficoFinanceiro;
-      graficoFinanceiro.data.datasets[0].data = transacoes.length === 0 ? [1,1] : [totalReceitas, Math.abs(totalDespesas)];
+      graficoFinanceiro.data.datasets[0].data = transacoes.length === 0 ? [1, 1] : [totalReceitas || 0, Math.abs(totalDespesas) || 0];
       graficoFinanceiro.update();
     }
 
-    // Gráfico por categorias (se liga que tem um monte de coisa repetida, mas é pq são graficos diferentes)
-
+    // Gráfico por categorias
     if (!graficoCategorias) {
       graficoCategorias = new Chart(ctxCategorias, {
         type: tipoGraficoCategorias,
@@ -108,9 +101,7 @@ function App() {
         },
         options: { responsive: true, plugins: { legend: { position: "bottom" } } }
       });
-    }
-    // isso daqui é pra ficar atualizando os graficos e tal
-      else {
+    } else {
       graficoCategorias.config.type = tipoGraficoCategorias;
       graficoCategorias.data.labels = Object.keys(dadosCategorias);
       graficoCategorias.data.datasets[0].label = abaAtiva === "receita" ? "Receitas por Categoria" : "Despesas por Categoria";
@@ -119,18 +110,17 @@ function App() {
     }
 
   }, [transacoes, tipoGraficoFinanceiro, tipoGraficoCategorias, abaAtiva]);
+
   return (
     <div className="container">
 
-      {/* Saldo geral (auto explicativo) */}
-
+      {/* Saldo geral */}
       <div className="card">
         <h1>Controle de Finanças</h1>
         <h2>Saldo: R$ {saldoAtual.toFixed(2)}</h2>
       </div>
 
-      {/* Parada pra criar uma nova transação (auto explicativo) */}
-
+      {/* Nova Transação */}
       <div className="card">
         <h3>Nova Transação</h3>
         {erro && <p style={{color:"red", fontWeight:"bold"}}>{erro}</p>}
@@ -147,18 +137,40 @@ function App() {
         </div>
       </div>
 
-
-      {/* Resumo das despesas e receitas*/}
-
+      {/* Resumo */}
       <div className="card">
         <h3>Resumo</h3>
         <p>Receitas: <b style={{color:"green"}}>R$ {totalReceitas.toFixed(2)}</b></p>
         <p>Despesas: <b style={{color:"red"}}>R$ {Math.abs(totalDespesas).toFixed(2)}</b></p>
         <p>Saldo: <b>R$ {saldoAtual.toFixed(2)}</b></p>
+
+        <div className="barra-progresso">
+          <div
+            className="receita-bar"
+            style={{
+              width: `${totalReceitas + Math.abs(totalDespesas) > 0 ? (totalReceitas / (totalReceitas + Math.abs(totalDespesas))) * 100 : 0}%`,
+              borderRadius: totalReceitas > 0 && Math.abs(totalDespesas) === 0 
+                ? "6px" 
+                : totalReceitas > 0 && Math.abs(totalDespesas) > 0 
+                  ? "6px 0 0 6px" 
+                  : "0"
+            }}
+          ></div>
+          <div
+            className="despesa-bar"
+            style={{
+              width: `${totalReceitas + Math.abs(totalDespesas) > 0 ? (Math.abs(totalDespesas) / (totalReceitas + Math.abs(totalDespesas))) * 100 : 0}%`,
+              borderRadius: Math.abs(totalDespesas) > 0 && totalReceitas === 0 
+                ? "6px" 
+                : Math.abs(totalDespesas) > 0 && totalReceitas > 0 
+                  ? "0 6px 6px 0" 
+                  : "0"
+            }}
+          ></div>
+        </div>
       </div>
 
       {/* Histórico de transações */}
-      
       <div className="card">
         <h3>Histórico</h3>
         <ul>
@@ -177,10 +189,9 @@ function App() {
         </ul>
       </div>
 
-      {/* Daqui pra baixo é grafico */}
-
+      {/* Gráficos */}
       <div className="graficos-grid">
-        {/* aqui é o primeiro graficp */}
+        {/* Gráfico Receitas vs Despesas */}
         <div className="card">
           <h3>Receitas vs Despesas</h3>
           <label>Tipo de Gráfico: </label>
@@ -191,8 +202,7 @@ function App() {
           <canvas id="graficoFinanceiro"></canvas>
         </div>
 
-        {/* Gráfico por categoria (função pra alterar os graficos relacionados a categorias e tals) */}
-
+        {/* Gráfico por categoria */}
         <div className="card">
           <h3>Gráficos por Categoria</h3>
           <div style={{display:"flex", gap:"0.5rem", marginBottom:"0.5rem"}}>
@@ -211,12 +221,5 @@ function App() {
   );
 }
 
-// Renderização ( isso faz aparecer as paradas na tela)
+// Renderização
 ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-
-
-
-
-
-// TÔ CANSADO VOU DORMIR e se lembrem de tirar os comentários depois
-// ass: Felipe 
