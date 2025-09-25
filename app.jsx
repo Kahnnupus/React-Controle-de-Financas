@@ -12,9 +12,11 @@ function App() {
   const [tipoGraficoFinanceiro, setTipoGraficoFinanceiro] = useState("doughnut");
   const [tipoGraficoCategorias, setTipoGraficoCategorias] = useState("bar");
   const [abaAtiva, setAbaAtiva] = useState("despesas");
+
   const categoriasDisponiveis = [
     "Salário","Alimentação", "Transporte", "Lazer", "Saúde", "Educação", "Moradia", "Outros"
   ];
+
   const validarInputs = () => {
     if (!descricao) return "O campo 'Descrição' deve ser preenchido.";
     if (!valor) return "O campo 'Valor' deve ser preenchido.";
@@ -22,6 +24,7 @@ function App() {
     if (!categoria) return "Selecione uma categoria.";
     return "";
   };
+
   const adicionarTransacao = (tipo) => {
     const erroValidacao = validarInputs();
     if (erroValidacao) {
@@ -39,9 +42,11 @@ function App() {
     setTransacoes([novaTransacao, ...transacoes]);
     setDescricao(""); setValor(""); setData(""); setCategoria("Outros");
   };
+
   const removerTransacao = (id) => {
     setTransacoes(transacoes.filter(t => t.id !== id));
   };
+
   const totalReceitas = transacoes.filter(t => t.valor > 0).reduce((soma,t)=>soma+t.valor,0);
   const totalDespesas = transacoes.filter(t => t.valor < 0).reduce((soma,t)=>soma+t.valor,0);
   const saldoAtual = totalReceitas + totalDespesas;
@@ -125,6 +130,7 @@ function App() {
       graficoCategorias.update();
     }
   }, [transacoes, tipoGraficoFinanceiro, tipoGraficoCategorias, abaAtiva]);
+
   return (
     <div className="container">
       <div className="card saldo">
@@ -135,6 +141,7 @@ function App() {
           R$ {saldoAtual.toFixed(2)}
         </div>
       </div>
+
       <div className="card">
         <h3>Nova Transação</h3>
         {erro && <p style={{color:"red", fontWeight:"bold"}}>{erro}</p>}
@@ -144,18 +151,19 @@ function App() {
         <select value={categoria} onChange={(e) => setCategoria(e.target.value)}>
           {categoriasDisponiveis.map(cat => (<option key={cat}>{cat}</option>))}
         </select>
-
         <div style={{display:"flex", justifyContent:"space-between", marginTop:"0.5rem"}}>
           <button className="receita" onClick={() => adicionarTransacao("receita")}>+ Receita</button>
           <button className="despesa" onClick={() => adicionarTransacao("despesa")}>- Despesa</button>
         </div>
       </div>
+
       <div className="card">
         <h3>Resumo</h3>
         <p>Receitas: <b style={{color:"#5e18df"}}>R$ {totalReceitas.toFixed(2)}</b></p>
         <p>Despesas: <b style={{color:"#d32056"}}>R$ {Math.abs(totalDespesas).toFixed(2)}</b></p>
         <p>Saldo: <b>R$ {saldoAtual.toFixed(2)}</b></p>
       </div>
+
       <div className="card">
         <h3>Histórico</h3>
         <ul>
@@ -176,6 +184,7 @@ function App() {
           ))}
         </ul>
       </div>
+
       <div className="graficos-grid">
         <div className="card">
           <h3>Receitas vs Despesas</h3>
@@ -184,9 +193,9 @@ function App() {
             <option value="doughnut">Pizza</option>
             <option value="bar">Barra</option>
           </select>
-          <canvas id="graficoFinanceiro">
-          </canvas>
+          <canvas id="graficoFinanceiro"></canvas>
         </div>
+
         <div className="card">
           <h3>Gráficos por Categoria</h3>
           <div style={{display:"flex", gap:"0.5rem", marginBottom:"0.5rem"}}>
@@ -196,7 +205,7 @@ function App() {
           <label>Tipo de Gráfico: </label>
           <select value={tipoGraficoCategorias} onChange={(e)=>setTipoGraficoCategorias(e.target.value)}>
             <option value="bar">Barra</option>
-            <option value="doughnut">Pizza</option>
+            <option value="doughnut">Pizza (Doughnut)</option>
           </select>
           <canvas id="graficoCategorias"></canvas>
         </div>
