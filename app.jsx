@@ -1,12 +1,14 @@
 const { useState, useEffect } = React;
 
-// é as variáveis dos gráficos (nem toque nisso aqu)
+
+
 let graficoFinanceiro = null;
 let graficoCategorias = null;
 
 function App() {
 
-  // Estados principais
+  
+
   const [transacoes, setTransacoes] = useState([]);
   const [descricao, setDescricao] = useState("");
   const [valor, setValor] = useState("");
@@ -14,16 +16,17 @@ function App() {
   const [categoria, setCategoria] = useState("Outros");
   const [erro, setErro] = useState("");
 
-  // Controle de tipos de gráficos
+  
   const [tipoGraficoFinanceiro, setTipoGraficoFinanceiro] = useState("doughnut");
-  const [tipoGraficoCategorias, setTipoGraficoCategorias] = useState("pie");
-  const [abaAtiva, setAbaAtiva] = useState("receita");
+  const [tipoGraficoCategorias, setTipoGraficoCategorias] = useState("bar");
+  const [abaAtiva, setAbaAtiva] = useState("despesas");
 
   const categoriasDisponiveis = [
     "Alimentação", "Transporte", "Lazer", "Saúde", "Educação", "Moradia", "Outros"
   ];
 
-  // Adicionar nova transação
+  
+
   const adicionarTransacao = (tipo) => {
     if (!descricao || !valor || !data || !categoria) {
       setErro("Preencha todos os campos.");
@@ -41,17 +44,20 @@ function App() {
     setDescricao(""); setValor(""); setData(""); setCategoria("Outros");
   };
 
-  // Remover transação
+ 
+
   const removerTransacao = (id) => {
     setTransacoes(transacoes.filter(t => t.id !== id));
   };
 
-  // Totais principais
+ 
+
   const totalReceitas = transacoes.filter(t => t.valor > 0).reduce((soma,t)=>soma+t.valor,0);
   const totalDespesas = transacoes.filter(t => t.valor < 0).reduce((soma,t)=>soma+t.valor,0);
   const saldoAtual = totalReceitas + totalDespesas;
 
-  // Soma por categoria
+  
+
   const somaPorCategoria = (tipo) => {
     const filtro = tipo === "receita" ? (t => t.valor > 0) : (t => t.valor < 0);
     const valores = {};
@@ -61,66 +67,89 @@ function App() {
     return valores;
   };
 
-  // Renderização e atualização dos graficos
+  
   useEffect(() => {
-    const ctx = document.getElementById("graficoFinanceiro");
-    const ctxCategorias = document.getElementById("graficoCategorias");
+  const ctx = document.getElementById("graficoFinanceiro");
+  const ctxCategorias = document.getElementById("graficoCategorias");
+  const dadosGerais = { Receitas: totalReceitas, Despesas: Math.abs(totalDespesas) };
+  const dadosCategorias = somaPorCategoria(abaAtiva);
+  Chart.defaults.font.family = "Poppins";
+  Chart.defaults.font.size = 13;
+  Chart.defaults.font.weight = 600;
+  Chart.defaults.color = "#fff"; 
 
-    const dadosCategorias = somaPorCategoria(abaAtiva);
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+      position: "bottom",
+        
+    },
+    
+  }};
 
-    // Gráfico de receitas e despesas
-    if (!graficoFinanceiro) {
-      graficoFinanceiro = new Chart(ctx, {
-        type: tipoGraficoFinanceiro,
-        data: {
-          labels: ["Receitas", "Despesas"],
-          datasets: [{
-            data: transacoes.length === 0 ? [1, 1] : [totalReceitas || 0, Math.abs(totalDespesas) || 0],
-            backgroundColor: ["#4caf50", "#f44336"]
-          }]
-        },
-        options: { responsive: true, plugins: { legend: { position: "bottom" } } }
-      });
+  if (!graficoFinanceiro) {
+  graficoFinanceiro = new Chart(ctx, {
+    type: tipoGraficoFinanceiro,
+    data: {
+      labels: ["Receitas", "Despesas"],
+      datasets: [{
+        label: "Receitas vs Despesas",
+        data: [totalReceitas, Math.abs(totalDespesas)],
+        backgroundColor: ["#5e18df", "#d32056"]
+      }]
+    },
+    options: chartOptions
+  });
+
+
     } else {
       graficoFinanceiro.config.type = tipoGraficoFinanceiro;
-      graficoFinanceiro.data.datasets[0].data = transacoes.length === 0 ? [1, 1] : [totalReceitas || 0, Math.abs(totalDespesas) || 0];
+      graficoCategorias.options = chartOptions;
+      graficoFinanceiro.data.labels = Object.keys(dadosGerais);
+      graficoFinanceiro.data.datasets[0].labels = ["Receitas vs Despesas"];
+      graficoFinanceiro.data.datasets[0].data = [totalReceitas, Math.abs(totalDespesas)];
       graficoFinanceiro.update();
     }
 
-    // Gráfico por categorias
-    if (!graficoCategorias) {
-      graficoCategorias = new Chart(ctxCategorias, {
-        type: tipoGraficoCategorias,
-        data: {
-          labels: Object.keys(dadosCategorias),
-          datasets: [{
-            label: abaAtiva === "receita" ? "Receitas por Categoria" : "Despesas por Categoria",
-            data: Object.values(dadosCategorias),
-            backgroundColor: ["#ff6384","#ff9f40","#ffcd56","#4bc0c0","#36a2eb","#b566ffff","#c9cbcf"]
-          }]
-        },
-        options: { responsive: true, plugins: { legend: { position: "bottom" } } }
-      });
-    } else {
-      graficoCategorias.config.type = tipoGraficoCategorias;
-      graficoCategorias.data.labels = Object.keys(dadosCategorias);
-      graficoCategorias.data.datasets[0].label = abaAtiva === "receita" ? "Receitas por Categoria" : "Despesas por Categoria";
-      graficoCategorias.data.datasets[0].data = Object.values(dadosCategorias);
-      graficoCategorias.update();
-    }
-
-  }, [transacoes, tipoGraficoFinanceiro, tipoGraficoCategorias, abaAtiva]);
+  if (!graficoCategorias) {
+    graficoCategorias = new Chart(ctxCategorias, {
+      type: tipoGraficoCategorias,
+      data: {
+        labels: Object.keys(dadosCategorias),
+        datasets: [{
+          label: abaAtiva === "receita" ? "Receitas por Categoria" : "Despesas por Categoria",
+          data: Object.values(dadosCategorias),
+          backgroundColor: ["#ff6384","#ff9f40","#ffcd56","#4bc0c0","#36a2eb","#9966ff","#c9cbcf"]
+        }]
+      },
+      options: chartOptions
+    });
+  } else {
+    graficoCategorias.config.type = tipoGraficoCategorias;
+    graficoCategorias.options = chartOptions;
+    graficoCategorias.data.labels = Object.keys(dadosCategorias);
+    graficoCategorias.data.datasets[0].label =
+      abaAtiva === "receita" ? "Receitas por Categoria" : "Despesas por Categoria";
+    graficoCategorias.data.datasets[0].data = Object.values(dadosCategorias);
+    graficoCategorias.update();
+  }
+}, [transacoes, tipoGraficoFinanceiro, tipoGraficoCategorias, abaAtiva]);
 
   return (
     <div className="container">
 
-      {/* Saldo geral */}
-      <div className="card">
-        <h1>Controle de Finanças</h1>
-        <h2>Saldo: R$ {saldoAtual.toFixed(2)}</h2>
-      </div>
+      
+      <div className="card saldo">
+        <div className="saldo-top">
+          <span className="saldo-label">Saldo Atual · BRL</span>
+        </div>
+        <div className="saldo-balance">
+          R$ {saldoAtual.toFixed(2)}
+        </div>
+        </div>
+      
 
-      {/* Nova Transação */}
       <div className="card">
         <h3>Nova Transação</h3>
         {erro && <p style={{color:"red", fontWeight:"bold"}}>{erro}</p>}
@@ -137,61 +166,43 @@ function App() {
         </div>
       </div>
 
-      {/* Resumo */}
+
+      
+
       <div className="card">
         <h3>Resumo</h3>
-        <p>Receitas: <b style={{color:"green"}}>R$ {totalReceitas.toFixed(2)}</b></p>
-        <p>Despesas: <b style={{color:"red"}}>R$ {Math.abs(totalDespesas).toFixed(2)}</b></p>
+        <p>Receitas: <b style={{color:"#5e18df"}}>R$ {totalReceitas.toFixed(2)}</b></p>
+        <p>Despesas: <b style={{color:"#d32056"}}>R$ {Math.abs(totalDespesas).toFixed(2)}</b></p>
         <p>Saldo: <b>R$ {saldoAtual.toFixed(2)}</b></p>
-
-        <div className="barra-progresso">
-          <div
-            className="receita-bar"
-            style={{
-              width: `${totalReceitas + Math.abs(totalDespesas) > 0 ? (totalReceitas / (totalReceitas + Math.abs(totalDespesas))) * 100 : 0}%`,
-              borderRadius: totalReceitas > 0 && Math.abs(totalDespesas) === 0 
-                ? "6px" 
-                : totalReceitas > 0 && Math.abs(totalDespesas) > 0 
-                  ? "6px 0 0 6px" 
-                  : "0"
-            }}
-          ></div>
-          <div
-            className="despesa-bar"
-            style={{
-              width: `${totalReceitas + Math.abs(totalDespesas) > 0 ? (Math.abs(totalDespesas) / (totalReceitas + Math.abs(totalDespesas))) * 100 : 0}%`,
-              borderRadius: Math.abs(totalDespesas) > 0 && totalReceitas === 0 
-                ? "6px" 
-                : Math.abs(totalDespesas) > 0 && totalReceitas > 0 
-                  ? "0 6px 6px 0" 
-                  : "0"
-            }}
-          ></div>
-        </div>
       </div>
 
-      {/* Histórico de transações */}
+      
+      
       <div className="card">
         <h3>Histórico</h3>
         <ul>
           {transacoes.map(t => (
-            <li key={t.id} style={{color: t.valor<0?"red":"green", display:"flex", flexDirection:"column", marginBottom:"0.5rem"}}>
-              <span><b>{t.descricao}</b> - {t.categoria}</span>
-              <span>R$ {t.valor.toFixed(2)} | {t.data}</span>
-              <button
-                onClick={() => removerTransacao(t.id)}
-                style={{background:"gray", padding:"0.3rem 0.6rem", marginTop:"0.3rem", alignSelf:"flex-start"}}
-              >
-                X
-              </button>
-            </li>
+        <li key={t.id}>
+          <span>
+            <b style={{color:"#fff"}}>{t.descricao}</b> - <span style={{color:"#fff"}}>{t.categoria}</span>
+          </span>
+          <span>
+            <b className={t.valor < 0 ? "valor-despesa" : "valor-receita"}>
+              R$ {t.valor.toFixed(2)}
+            </b>
+            {" | "}
+          <span className="data">{t.data}</span>
+          </span>
+          <button onClick={()=>removerTransacao(t.id)}>X</button>
+        </li>
           ))}
         </ul>
       </div>
 
-      {/* Gráficos */}
+     
+
       <div className="graficos-grid">
-        {/* Gráfico Receitas vs Despesas */}
+        
         <div className="card">
           <h3>Receitas vs Despesas</h3>
           <label>Tipo de Gráfico: </label>
@@ -202,18 +213,18 @@ function App() {
           <canvas id="graficoFinanceiro"></canvas>
         </div>
 
-        {/* Gráfico por categoria */}
+        
         <div className="card">
           <h3>Gráficos por Categoria</h3>
           <div style={{display:"flex", gap:"0.5rem", marginBottom:"0.5rem"}}>
-            <button onClick={()=>setAbaAtiva("receita")} style={{flex:1, background: abaAtiva==="receita"?"#4caf50":"#ddd", color: abaAtiva==="receita"?"#fff":"#000"}}>Receitas</button>
-            <button onClick={()=>setAbaAtiva("despesas")} style={{flex:1, background: abaAtiva==="despesas"?"#f44336":"#ddd", color: abaAtiva==="despesas"?"#fff":"#000"}}>Despesas</button>
+            <button onClick={()=>setAbaAtiva("receita")} style={{flex:1, background: abaAtiva==="receita"?"#5e18df":"#ddd", color: abaAtiva==="receita"?"#fff":"#000"}}>Receitas</button>
+            <button onClick={()=>setAbaAtiva("despesas")} style={{flex:1, background: abaAtiva==="despesas"?"#d32056":"#ddd", color: abaAtiva==="despesas"?"#fff":"#000"}}>Despesas</button>           
           </div>
           <label>Tipo de Gráfico: </label>
           <select value={tipoGraficoCategorias} onChange={(e)=>setTipoGraficoCategorias(e.target.value)}>
-            <option value="pie">Pizza</option>
-            <option value="radar">Radar</option>
-          </select> 
+            <option value="bar">Barra</option>
+            <option value="doughnut">Pizza (Doughnut)</option>
+          </select>
           <canvas id="graficoCategorias"></canvas>
         </div>
       </div>
@@ -221,5 +232,5 @@ function App() {
   );
 }
 
-// Renderização
+
 ReactDOM.createRoot(document.getElementById("root")).render(<App />);
