@@ -1,89 +1,144 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background: #222;
-  color: #eee;
+body{
+  margin:0;
+  background:#0d0d0f;
+  color:#f5f5f7;
+  font-family:'Poppins';
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 }
 
-.container {
-  max-width: 500px;
-  margin: auto;
-  padding: 1rem;
+.bg-video{
+  position:fixed; inset:0;
+  width:100%; height:100%;
+  object-fit:cover;
+  z-index:-2;
+  }
+
+.container{
+  max-width:500px;
+  margin:auto;
+  padding:16px;
+  box-sizing:border-box;
 }
 
 .card {
-  background: #333;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  background: rgba(0, 0, 0, 0.329);       
+  backdrop-filter: blur(12px);       
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.5);
 }
 
-h1, h2, h3 {
-  margin: 0 0 1rem;
-  text-align: center;
+
+h1,h2,h3{ margin:0 0 12px; text-align:center; }
+h1{ font-size:1.1rem; font-weight:600; color:#ffffff; }
+h2{ font-size:2rem; font-weight:700; }
+h3{ font-size:1rem; font-weight:600; color:#ffffff; }
+
+.saldo-top { 
+  display:flex; 
+  justify-content:center; 
 }
 
-input {
-  width: 100%;
-  max-width: 100%;
-  padding: 0.6rem;
-  margin: 0.3rem 0;
-  border: 1px solid #666;
-  border-radius: 8px;
-  background: #444;
-  color: #eee;
-  box-sizing: border-box;
+.saldo-label { 
+  font-size:.9rem; 
+  color:#c9ced8; 
 }
 
-button {
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1rem;
-  color: #fff;
+.saldo-balance {
+  text-align:center; 
+  font-size:2.6rem; 
+  font-weight:700;
+  line-height:1.2; 
+  margin-top:6px; 
+  letter-spacing:-.5px;
+  color:#fff; 
 }
 
-button.receita {
-  background: #4caf50;
+
+input,select{
+  width:100%;
+  padding:12px 14px;
+  margin:6px 0;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:12px;
+  background:rgba(255,255,255,.10);
+  color:#ffffff;
+  outline:none; box-sizing:border-box;
+}
+input:focus,select:focus{
+  border-color:rgba(66, 2, 82, 0.55) !important;
+  box-shadow:0 0 0 3px rgba(154, 47, 255, 0.18) !important;
+  background:rgba(255, 255, 255, 0.027) !important;
 }
 
-button.despesa {
-  background: #f44336;
+input::placeholder {
+  color: #ffffff;
 }
 
-ul {
-  list-style: none;
-  padding: 0;
+option {
+  color: #f5f5f7;   
+  background:#252525;
 }
 
+button{
+  padding:12px 14px;
+  border:none; border-radius:12px;
+  cursor:pointer; font-size:1rem; font-weight:600; color:#fff;
+}
+
+button.receita{ background:#5e18df; }
+button.despesa{ background:#d32056; }
+
+ul{ list-style:none; padding:0; margin:0; }
 li {
+  position: relative;
   display: flex;
-  justify-content: space-between;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #555;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 8px;
 }
 
-.barra-progresso {
-  background: #555;
-  border-radius: 6px;
-  height: 10px;
-  margin-top: 0.5rem;
-  display: flex;
+li button {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.9rem;
 }
 
-.receita-bar {
-  background: #4caf50;
-  height: 100%;
-}
 
-.despesa-bar {
-  background: #f44336;
-  height: 100%;
+.graficos-grid{ display:grid; gap:14px; }
+canvas{ width:100% !important; height:auto !important; }
+
+.valor-receita { 
+  color:#5e18df; 
+  font-weight:700; 
+  }
+
+.valor-despesa { 
+  color:#d32056; 
+  font-weight:700; 
+  }
+
+.data { color:#fff; }
+
+.app-logo {
+  text-align: center;
+  margin: 20px 0;
 }
-.grafico-container {
-  opacity: 0.1;
-  margin-top: 1rem;
-}
+.app-logo img {
+  width: 100px;  
+  }
+
