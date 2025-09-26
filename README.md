@@ -1,7 +1,7 @@
 ```markdown
 # React-Controle-de-Financas
 
-## 📄 Documentação Expandida – React Controle de Finanças
+## Documentação Expandida – React Controle de Finanças
 
 **Projeto:** React Controle de Finanças – Albinstech  
 **Descrição:**  
@@ -10,7 +10,7 @@ Este documento serve como guia técnico completo, incluindo visão geral, arquit
 
 ---
 
-## 1️⃣ Visão Geral do Sistema
+## Visão Geral do Sistema
 
 O sistema permite o **cadastro de transações financeiras** (receitas e despesas), exibindo **gráficos dinâmicos** com estatísticas em tempo real.  
 Foi desenvolvido em **React**, utilizando **Hooks** (`useState`, `useEffect`) para gerenciamento de estado, e a biblioteca **Chart.js** para visualização de dados.
@@ -22,11 +22,11 @@ Foi desenvolvido em **React**, utilizando **Hooks** (`useState`, `useEffect`) pa
 
 ---
 
-## 2️⃣ Estrutura do Projeto
+## Estrutura do Projeto
 
 A aplicação é composta pelos seguintes arquivos e pastas detectados:
 
-```
+
 
 React-Controle-de-Financas-main/
 │
@@ -40,10 +40,10 @@ React-Controle-de-Financas-main/
 └─ video_att_.mov     → Vídeo de demonstração
 
 ````
-
+````
 ---
 
-## ⚛️ Estados Principais (`useState`)
+## Estados Principais (`useState`)
 
 Os estados controlam dados e comportamento da aplicação:
 
@@ -55,7 +55,7 @@ Os estados controlam dados e comportamento da aplicação:
 
 ---
 
-## 🔑 Funções Importantes
+## Funções Importantes
 
 - **validarInputs()**: Verifica se todos os campos obrigatórios estão preenchidos.  
 - **adicionarTransacao(tipo)**: Cria uma nova transação (receita ou despesa).  
@@ -65,7 +65,7 @@ Os estados controlam dados e comportamento da aplicação:
 
 ---
 
-## ⚡ Instalação e Execução
+## Instalação e Execução
 
 1. **Baixe o projeto** ou clone o repositório:
    ```bash
@@ -95,9 +95,8 @@ Os estados controlam dados e comportamento da aplicação:
 
 ---
 
-## 💻 Trecho Importante do Código – `App.jsx`
+## Trecho Importante do Código – `App.jsx`
 
-*(apenas as primeiras linhas e funções principais para ilustração)*
 
 ```javascript
 // Importações principais
