@@ -36,7 +36,6 @@ React-Controle-de-Financas-main/
 ├─ favicon.png        → Ícone do site
 ├─ logo app.png       → Logotipo do aplicativo
 ├─ README.md          → Documentação básica
-├─ PinDown.io_@KillyanAZ_1758799301.mp4 → Vídeo de demonstração
 └─ video_att_.mov     → Vídeo de demonstração
 
 ````
