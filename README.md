@@ -1,74 +1,69 @@
-```markdown
-# React-Controle-de-Financas
+# Controle de Finanças em React
 
-## Documentação Expandida – React Controle de Finanças
-
-**Projeto:** React Controle de Finanças – Albinstech  
-**Descrição:**  
-Sistema React de controle financeiro desenvolvido pela Albinstech.  
-Este documento serve como guia técnico completo, incluindo visão geral, arquitetura, diagramas, trechos de código e estrutura de pastas.
+Aplicação web desenvolvida pela Albinstech para simplificar o gerenciamento financeiro pessoal. O sistema centraliza o registro de entradas e saídas financeiras, gerando relatórios visuais automáticos para facilitar a análise de gastos e receitas.
 
 ---
 
-## Visão Geral do Sistema
+## Sobre o Projeto
 
-O sistema permite o **cadastro de transações financeiras** (receitas e despesas), exibindo **gráficos dinâmicos** com estatísticas em tempo real.  
-Foi desenvolvido em **React**, utilizando **Hooks** (`useState`, `useEffect`) para gerenciamento de estado, e a biblioteca **Chart.js** para visualização de dados.
+O objetivo principal desta ferramenta é oferecer um painel direto e intuitivo para o acompanhamento do orçamento diário. Construída em React, a interface atualiza métricas e dados gráficos instantaneamente a cada nova movimentação cadastrada pelo usuário.
 
-### Principais funcionalidades:
-- Cadastro de transações com **descrição**, **valor**, **data** e **categoria**.
-- Visualização de **gráficos por tipo e categoria** (despesas/receitas).
-- Atualização dinâmica das estatísticas a cada nova transação.
+### Recursos
+
+* **Entrada de dados:** Registro detalhado de transações informando descrição, valor monetário, data e categoria.
+* **Métricas visuais:** Gráficos interativos renderizados via Chart.js que dividem os valores por tipo (receita ou despesa) e por categorias específicas.
+* **Painel reativo:** Recálculo imediato de totais e indicadores a cada inclusão ou remoção de item.
+* **Validação de campos:** Checagem preventiva para evitar o envio de dados em branco ou inconsistentes.
 
 ---
 
-## Estrutura do Projeto
+## Tecnologias Empregadas
 
-A aplicação é composta pelos seguintes arquivos e pastas detectados:
+* **React:** Construção de interface reativa utilizando Hooks nativos (`useState`, `useEffect`) para controle de estado e ciclo de vida.
+* **Chart.js:** Renderização de gráficos dinâmicos para visualização analítica dos dados.
+* **HTML5 e CSS3:** Estrutura semântica e estilização dos componentes.
 
+---
 
+## Estrutura de Arquivos
 
+```text
 React-Controle-de-Financas-main/
 │
-├─ app.jsx            → Componente principal da aplicação React
-├─ index.html         → Estrutura HTML base
-├─ style.css          → Estilos globais
-├─ favicon.png        → Ícone do site
-├─ logo app.png       → Logotipo do aplicativo
-├─ README.md          → Documentação básica
-└─ video_att_.mov     → Vídeo de demonstração
-
-````
-````
----
-
-## Estados Principais (`useState`)
-
-Os estados controlam dados e comportamento da aplicação:
-
-- **transacoes**: lista de todas as transações.  
-- **descricao, valor, data, categoria**: inputs do formulário.  
-- **erro**: mensagens de validação.  
-- **tipoGraficoFinanceiro** e **tipoGraficoCategorias**: configurações de gráficos.  
-- **abaAtiva**: alterna entre despesas e receitas.
-
----
-
-## Funções Importantes
-
-- **validarInputs()**: Verifica se todos os campos obrigatórios estão preenchidos.  
-- **adicionarTransacao(tipo)**: Cria uma nova transação (receita ou despesa).  
-- **atualizarGraficos()**: Atualiza os gráficos com base nas transações.  
-- **filtrarTransacoes(tipo)**: Filtra apenas receitas ou despesas.  
-- **removerTransacao(index)**: Exclui uma transação da lista.
----
-
-## 🚀 Extensões Futuras
-
-* Implementar **filtros por período** (mês, ano).
-* Exportar relatórios em **PDF/Excel**.
-* Criar **sistema de autenticação de usuário**.
-* Integração com banco de dados (ex.: **Firebase** ou **Supabase**).
-
+├── app.jsx            # Componente central com a lógica de negócio e renderização
+├── index.html         # Página base da aplicação
+├── style.css          # Folha de estilos e layout visual
+├── favicon.png        # Ícone de navegador
+├── logo app.png       # Identidade visual da aplicação
+├── README.md          # Documentação do projeto
+└── video_att_.mov     # Demonstração do funcionamento da interface
 ```
-```
+
+---
+
+## Arquitetura e Fluxo de Dados
+
+A aplicação gerencia o fluxo de informações internamente por meio de estados locais no componente principal:
+
+* `transacoes`: Coleção de objetos contendo todo o histórico de entradas e saídas.
+* `descricao`, `valor`, `data`, `categoria`: Estados dedicados a capturar e manter o valor dos campos do formulário antes do envio.
+* `erro`: Armazena mensagens de feedback caso a validação do formulário aponte pendências.
+* `abaAtiva`: Define a visualização atual do usuário entre o painel de receitas ou despesas.
+* `tipoGraficoFinanceiro` e `tipoGraficoCategorias`: Configuram parâmetros de exibição dos relatórios visuais.
+
+### Principais Métodos
+
+* `validarInputs()`: Confirma o preenchimento correto de todos os campos obrigatórios antes do processamento.
+* `adicionarTransacao(tipo)`: Formata os dados do formulário e os consolida como uma nova receita ou despesa na lista.
+* `atualizarGraficos()`: Repassa o conjunto de dados atualizado para as instâncias do Chart.js.
+* `filtrarTransacoes(tipo)`: Separa as movimentações registradas de acordo com a aba ou o filtro selecionado.
+* `removerTransacao(index)`: Exclui um registro específico e dispara a atualização das métricas.
+
+---
+
+## Próximos Passos e Melhorias
+
+* Implementação de filtros temporais para análise de dados por mês, trimestre ou ano.
+* Exportação de demonstrativos e relatórios em formatos como PDF e planilhas (CSV/Excel).
+* Autenticação de usuários para suporte a múltiplos perfis individuais.
+* Persistência em nuvem utilizando serviços de backend como Supabase ou Firebase.
